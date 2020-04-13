@@ -1,4 +1,3 @@
-import { Handler } from 'aws-lambda';
 import type { Redis } from 'ioredis';
 import lazilyResolve from './dependencies';
 import { v4String } from 'uuid/interfaces';
