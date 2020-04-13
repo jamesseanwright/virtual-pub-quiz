@@ -25,7 +25,7 @@ const memoise = <TReturn>(func: CallableFunction) => {
 
 /* By returning our dependencies object from
  * a function, we can ensure that we only
- * instatiate any deps once binding takes place */
+ * instatiate any deps on demand. */
 const createDependencies = memoise<Readonly<Dependencies>>((): Dependencies => ({
   redis: new Redis({ lazyConnect: true }),
   uuid: v4,
