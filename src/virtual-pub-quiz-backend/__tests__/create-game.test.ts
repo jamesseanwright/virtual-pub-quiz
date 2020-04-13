@@ -33,11 +33,12 @@ describe('create game lambda', () => {
       '78138c67-8241-4b24-a466-6e308e8cea7f',
     ];
 
-    const existingUuids = uuids.slice(0, 2);
+    const gameCodes = uuids.map(code => (code.match(/^[a-f0-9]+/i) || [])[0]);
+    const existingGameCodes = gameCodes.slice(0, 2);
 
     const redis = {
       set: jest.fn().mockResolvedValue(true),
-      exists: jest.fn().mockImplementation(key => Promise.resolve(existingUuids.includes(key))),
+      exists: jest.fn().mockImplementation(key => Promise.resolve(existingGameCodes.includes(key))),
     };
 
     const getUuid = jest.fn();
@@ -58,6 +59,6 @@ describe('create game lambda', () => {
     expect(redis.set).toHaveBeenCalledWith('78138c67', JSON.stringify({}));
     expect(redis.exists).toHaveBeenCalledTimes(3);
 
-    uuids.forEach(uuid => expect(redis.exists).toHaveBeenCalledWith(uuid));
+    gameCodes.forEach(gameCode => expect(redis.exists).toHaveBeenCalledWith(gameCode));
   });
 });
