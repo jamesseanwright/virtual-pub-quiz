@@ -25,4 +25,8 @@ describe('create game lambda', () => {
     expect(redis.set).toHaveBeenCalledTimes(1);
     expect(redis.set).toHaveBeenCalledWith('9b1deb4d', JSON.stringify({}));
   });
+
+  it('should generate another game code if the current one exists', () => {
+    throw new Error('To write!');
+  });
 });
