@@ -26,7 +26,7 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
    * figure out what we'll need to store. */
   await games.set(gameCode, JSON.stringify({}));
 
-  logger.info('Creating game with code', gameCode);
+  logger.info('Created game with code', gameCode);
 
   return {
     statusCode: 200,
