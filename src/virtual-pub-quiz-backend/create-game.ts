@@ -2,10 +2,12 @@ import type { Redis } from 'ioredis';
 import lazilyResolve from './dependencies';
 import { v4String } from 'uuid/interfaces';
 
-export const createHandler = (logger: Pick<Console, 'info'>, redis: Pick<Redis, 'set'>, getUuid: v4String) => async () => {
+export const createHandler = (logger: Pick<Console, 'info'>, redis: Pick<Redis, 'exists' | 'set'>, getUuid: v4String) => async () => {
   logger.info('Creating new game...');
 
   const [gameCode] = getUuid().match(/^[a-f0-9]+/i) || [];
+
+  // TODO: throw error if gameCode is undefined
 
   /* TODO: flesh out value cached as we
    * figure out what we'll need to store. */
