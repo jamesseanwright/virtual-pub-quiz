@@ -37,5 +37,5 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
 };
 
 export default {
-  handler: lazilyResolve('redis', 'uuid')(createHandler),
+  handler: lazilyResolve('logger', 'redis', 'uuid')(createHandler),
 };
