@@ -32,12 +32,10 @@ const createDependencies = memoise<Readonly<Dependencies>>((): Dependencies => (
   logger: console,
 }));
 
-const lazilyResolve = <TFactoryFunc extends CallableFunction>(...dependencyNames: string[]) =>
+const lazilyResolve = <TFactoryFunc extends CallableFunction>(...dependencyNames: (keyof Dependencies)[]) =>
   (factory: TFactoryFunc) => {
-    const resolvedDependencies = Object.entries(createDependencies())
-      .filter(([name]) => dependencyNames.includes(name))
-      .map(([, value]) => value);
-
+    const dependencies = createDependencies();
+    const resolvedDependencies = dependencyNames.map(name => dependencies[name]);
     return factory(...resolvedDependencies);
   };
 
