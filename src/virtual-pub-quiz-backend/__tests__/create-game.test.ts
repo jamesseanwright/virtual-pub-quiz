@@ -61,4 +61,38 @@ describe('create game lambda', () => {
 
     gameCodes.forEach(gameCode => expect(redis.exists).toHaveBeenCalledWith(gameCode));
   });
+
+  /* uuid() should always return a UUID, but
+   * this valids our fallback when our regex
+   * for extracting the first portion of the
+   * generated UUID somehow fails. */
+  it('should compute a new game code if the previously-computed UUID is falsy', async () => {
+    const uuids = [
+      '',
+      '7d261f9d-a038-4f7c-b1d7-ce7481e9118e',
+    ];
+
+    const redis = {
+      set: jest.fn().mockResolvedValue(true),
+      exists: jest.fn().mockResolvedValue(false),
+    };
+
+    const getUuid = jest.fn();
+
+    uuids.forEach(uuid => getUuid.mockReturnValueOnce(uuid));
+
+    const createGame = createHandler(logger, redis, getUuid);
+    const result = await createGame();
+
+    expect(result).toEqual({
+      statusCode: 200,
+      body: JSON.stringify({
+        gameCode: '7d261f9d',
+      }),
+    });
+
+    expect(redis.set).toHaveBeenCalledTimes(1);
+    expect(redis.set).toHaveBeenCalledWith('7d261f9d', JSON.stringify({}));
+    expect(redis.exists).toHaveBeenCalledTimes(1);
+  });
 });

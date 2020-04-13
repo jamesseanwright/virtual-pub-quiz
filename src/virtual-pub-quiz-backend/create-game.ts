@@ -12,7 +12,7 @@ type GamesStorage = Pick<Redis, 'exists' | 'set'>;
 const getGameCode = async (games: GamesStorage, getUuid: v4String): Promise<string> => {
   const [gameCode] = getUuid().match(/^[a-f0-9]+/i) || [];
 
-  return await games.exists(gameCode)
+  return !gameCode || await games.exists(gameCode)
     ? await getGameCode(games, getUuid)
     : gameCode;
 };
