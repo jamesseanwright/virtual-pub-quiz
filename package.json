@@ -27,13 +27,19 @@
   },
   "homepage": "https://github.com/jamesseanwright/virtual-pub-quiz#readme",
   "devDependencies": {
+    "@types/aws-lambda": "8.10.48",
+    "@types/ioredis": "4.14.9",
+    "@types/jest": "25.2.1",
     "@types/node": "13.11.1",
+    "@types/uuid": "7.0.2",
     "jest": "25.3.0",
     "ts-jest": "25.3.1",
     "typescript": "3.8.3"
   },
   "dependencies": {
     "aws-sdk": "2.656.0",
-    "serverless": "1.67.3"
+    "ioredis": "4.16.2",
+    "serverless": "1.67.3",
+    "uuid": "7.0.3"
   }
 }
