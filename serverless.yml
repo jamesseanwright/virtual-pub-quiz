@@ -1,0 +1,22 @@
+service: virtual-pub-quiz-backend
+frameworkVersion: "=1.67.3"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+functions:
+  createGame:
+    handler: dist/create-game.default
+    events:
+      - http:
+          path: game
+          method: post
+  endGame:
+    handler: dist/end-game.default
+    events:
+      - http: # TODO: probably wants to be SNS or something other than HTTP
+          path: game
+          method: delete
