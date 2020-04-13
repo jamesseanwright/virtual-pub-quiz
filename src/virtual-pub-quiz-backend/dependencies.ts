@@ -32,11 +32,19 @@ const createDependencies = memoise<Readonly<Dependencies>>((): Dependencies => (
   logger: console,
 }));
 
+/* This function resolves any dependencies
+ * for the inner function in a lazy fashion,
+ * to avoid eagerly boostrapping concrete
+ * dependencies and creating actual resources
+ * when it isn't necessary e.g. in unit tests */
 const lazilyResolve = <TFactoryFunc extends CallableFunction>(...dependencyNames: (keyof Dependencies)[]) =>
-  (factory: TFactoryFunc) => {
-    const dependencies = createDependencies();
-    const resolvedDependencies = dependencyNames.map(name => dependencies[name]);
-    return factory(...resolvedDependencies);
-  };
+  (factory: TFactoryFunc) =>
+    // TODO: make this signature lambda specific?
+    // TODO: improve type safety
+    (...args: unknown[]) => {
+      const dependencies = createDependencies();
+      const resolvedDependencies = dependencyNames.map(name => dependencies[name]);
+      return factory(...resolvedDependencies)(...args);
+    };
 
 export default lazilyResolve;
