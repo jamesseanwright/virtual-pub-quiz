@@ -22,8 +22,6 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
 
   const gameCode = await getGameCode(games, getUuid);
 
-  // TODO: throw error if gameCode is undefined
-
   /* TODO: flesh out value cached as we
    * figure out what we'll need to store. */
   await games.set(gameCode, JSON.stringify({}));
