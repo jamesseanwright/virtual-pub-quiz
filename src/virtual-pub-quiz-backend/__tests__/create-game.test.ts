@@ -18,7 +18,7 @@ describe('create game lambda', () => {
     expect(result).toEqual({
       statusCode: 200,
       body: JSON.stringify({
-        roomCode: '9b1deb4d'
+        gameCode: '9b1deb4d'
       }),
     });
 
