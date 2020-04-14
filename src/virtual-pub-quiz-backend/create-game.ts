@@ -4,6 +4,9 @@ import { v4String } from 'uuid/interfaces';
 
 type GamesStorage = Pick<Redis, 'exists' | 'set'>;
 
+const GAME_TTL_DAYS = 0.5;
+const SECONDS_PER_DAY = 86400;
+
 /* Although our game codes are taken from
  * UUIDs, the likehood of a collision is
  * increased given that we're only using the
@@ -24,7 +27,7 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
 
   /* TODO: flesh out value cached as we
    * figure out what we'll need to store. */
-  await games.set(gameCode, JSON.stringify({}));
+  await games.set(gameCode, JSON.stringify({}), 'EX', GAME_TTL_DAYS * SECONDS_PER_DAY);
 
   logger.info('Created game with code', gameCode);
 
