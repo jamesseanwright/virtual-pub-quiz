@@ -27,7 +27,7 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
 
   /* TODO: flesh out value cached as we
    * figure out what we'll need to store. */
-  await games.set(gameCode, JSON.stringify({}), 'EX', GAME_TTL_DAYS * SECONDS_PER_DAY);
+  await games.set(gameCode, JSON.stringify({}), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
 
   logger.info('Created game with code', gameCode);
 
