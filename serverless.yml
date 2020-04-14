@@ -1,11 +1,28 @@
-service: virtual-pub-quiz-backend
+service: virtual-pub-quiz
 frameworkVersion: "=1.67.3"
+
+custom:
+  subnetIds:
+    - subnet-62e6ba04
+    - subnet-6e59c034
+    - subnet-a5e3cced
+  securityGroupIds:
+    - sg-0e3d6f44cc84e3782
+  applicationTag:
+    Key: application-name
+    Value: ${self:service}
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   region: eu-west-1
+  stackName: ${self:service}
+  vpc:
+    subnetIds: ${self:custom:subnetIds}
+    securityGroupIds: ${self:custom:securityGroupIds}
+  tags:
+    ${self:custom:applicationTag:Key}: ${self:custom:applicationTag:value}
 
 functions:
   createGame:
@@ -14,9 +31,33 @@ functions:
       - http:
           path: game
           method: post
+
   endGame:
     handler: dist/end-game.default
     events:
       - http: # TODO: probably wants to be SNS or something other than HTTP
           path: game
           method: delete
+
+resources:
+  Resources:
+    redisSubnetGroup:
+      Type: AWS::ElastiCache::SubnetGroup
+      Properties:
+        CacheSubnetGroupName: ${self:service}-games-subnet-group
+        Description: Subnet for the games ElastiCache cluster
+        SubnetIds: ${self:custom:subnetIds}
+
+    redisServer:
+      Type: AWS::ElastiCache::CacheCluster
+      Properties:
+        ClusterName: ${self:service}-games
+        CacheNodeType: cache.t3.micro
+        CacheSubnetGroupName: ${self:service}-games-subnet-group
+        Engine: redis
+        EngineVersion: "5.0.8"
+        NumCacheNodes: 1
+        Port: 6379
+        VpcSecurityGroupIds: ${self:custom:securityGroupIds}
+        Tags:
+          - ${self:custom:applicationTag}
