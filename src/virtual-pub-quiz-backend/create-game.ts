@@ -26,7 +26,8 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
   const gameCode = await getGameCode(games, getUuid);
 
   /* TODO: flesh out value cached as we
-   * figure out what we'll need to store. */
+   * figure out what we'll need to store.
+   * TODO: refactor to Redis data structures */
   await games.set(gameCode, JSON.stringify({}), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
 
   logger.info('Created game with code', gameCode);
