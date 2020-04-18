@@ -13,7 +13,7 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
 
     await games.del(gameCode);
 
-    logger.info('Successfully ended game, gameCode');
+    logger.info('Successfully ended game', gameCode);
 
     /* TODO: Build shared response builder if
      * not using API Gateway lambda proxy */
