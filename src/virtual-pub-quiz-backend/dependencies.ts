@@ -1,6 +1,8 @@
 import * as Redis from 'ioredis';
 import { v4 } from 'uuid';
 
+const { REDIS_HOST } = process.env;
+
 interface Dependencies {
   redis: Redis.Redis;
   uuid: typeof v4;
@@ -27,7 +29,7 @@ const memoise = <TReturn>(func: CallableFunction) => {
  * a function, we can ensure that we only
  * instatiate any deps on demand. */
 const createDependencies = memoise<Readonly<Dependencies>>((): Dependencies => ({
-  redis: new Redis({ lazyConnect: true }),
+  redis: new Redis(6379, REDIS_HOST),
   uuid: v4,
   logger: console,
 }));
