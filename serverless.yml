@@ -66,6 +66,8 @@ resources:
           - # TODO: make this a reusable CloudFormation-specific tag
             Key: application-name
             Value: ${self:service}
+  # TODO: build will fail if stack outputs don't exist.
+  # Bootstrap infra before running serverless deploy?
   Outputs:
     redisHost:
       Description: Host for the games Redis server
