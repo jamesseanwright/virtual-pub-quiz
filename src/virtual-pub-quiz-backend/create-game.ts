@@ -26,6 +26,9 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
 
   const gameCode = await getGameCode(games, getUuid);
 
+  /* TODO: apparently, hmset is deprecated, but hset
+   * supports variadic values; update DefinitelyTyped
+   * definition once confirmed as true to support this */
   await games.hmset(gameCode, ...createGame(), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
 
   logger.info('Created game with code', gameCode);
