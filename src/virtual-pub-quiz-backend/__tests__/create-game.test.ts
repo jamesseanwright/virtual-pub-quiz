@@ -1,4 +1,5 @@
 import { createHandler } from '../create-game';
+import { createGame as createGameModel } from '../models';
 
 describe('create game lambda', () => {
   const logger = {
@@ -7,14 +8,10 @@ describe('create game lambda', () => {
 
   const expectedExpiry = ['EX', 43200];
 
-  const expectedGame = JSON.stringify({
-    rounds: [],
-  });
-
   it('should create a random game ID and store it under a new session in Redis', async () => {
     const redis = {
       exists: jest.fn().mockResolvedValue(false),
-      set: jest.fn().mockResolvedValue(true),
+      hmset: jest.fn().mockResolvedValue(true),
     };
 
     const getUuid = () => '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
@@ -28,8 +25,8 @@ describe('create game lambda', () => {
       }),
     });
 
-    expect(redis.set).toHaveBeenCalledTimes(1);
-    expect(redis.set).toHaveBeenCalledWith('9b1deb4d', expectedGame, ...expectedExpiry);
+    expect(redis.hmset).toHaveBeenCalledTimes(1);
+    expect(redis.hmset).toHaveBeenCalledWith('9b1deb4d', ...createGameModel(), ...expectedExpiry);
   });
 
   it('should generate another game code if the current one exists', async () => {
@@ -43,7 +40,7 @@ describe('create game lambda', () => {
     const existingGameCodes = gameCodes.slice(0, 2);
 
     const redis = {
-      set: jest.fn().mockResolvedValue(true),
+      hmset: jest.fn().mockResolvedValue(true),
       exists: jest.fn().mockImplementation(key => Promise.resolve(existingGameCodes.includes(key))),
     };
 
@@ -61,8 +58,8 @@ describe('create game lambda', () => {
       }),
     });
 
-    expect(redis.set).toHaveBeenCalledTimes(1);
-    expect(redis.set).toHaveBeenCalledWith('78138c67', expectedGame, ...expectedExpiry);
+    expect(redis.hmset).toHaveBeenCalledTimes(1);
+    expect(redis.hmset).toHaveBeenCalledWith('78138c67', ...createGameModel(), ...expectedExpiry);
     expect(redis.exists).toHaveBeenCalledTimes(3);
 
     gameCodes.forEach(gameCode => expect(redis.exists).toHaveBeenCalledWith(gameCode));
@@ -79,7 +76,7 @@ describe('create game lambda', () => {
     ];
 
     const redis = {
-      set: jest.fn().mockResolvedValue(true),
+      hmset: jest.fn().mockResolvedValue(true),
       exists: jest.fn().mockResolvedValue(false),
     };
 
@@ -97,8 +94,8 @@ describe('create game lambda', () => {
       }),
     });
 
-    expect(redis.set).toHaveBeenCalledTimes(1);
-    expect(redis.set).toHaveBeenCalledWith('7d261f9d', expectedGame, ...expectedExpiry);
+    expect(redis.hmset).toHaveBeenCalledTimes(1);
+    expect(redis.hmset).toHaveBeenCalledWith('7d261f9d', ...createGameModel(), ...expectedExpiry);
     expect(redis.exists).toHaveBeenCalledTimes(1);
   });
 });

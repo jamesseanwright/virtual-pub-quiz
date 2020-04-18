@@ -1,8 +1,9 @@
 import type { Redis } from 'ioredis';
-import lazilyResolve from './dependencies';
 import { v4String } from 'uuid/interfaces';
+import lazilyResolve from './dependencies';
+import { createGame } from './models';
 
-type GamesStorage = Pick<Redis, 'exists' | 'set'>;
+type GamesStorage = Pick<Redis, 'exists' | 'hmset'>;
 
 const GAME_TTL_DAYS = 0.5;
 const SECONDS_PER_DAY = 86400;
@@ -20,18 +21,12 @@ const getGameCode = async (games: GamesStorage, getUuid: v4String): Promise<stri
     : gameCode;
 };
 
-// TODO: flesh this structure out!
-const createGame = () => ({
-  rounds: [],
-});
-
 export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage, getUuid: v4String) => async () => {
   logger.info('Creating new game...');
 
   const gameCode = await getGameCode(games, getUuid);
 
-  // TODO: refactor to Redis data structures
-  await games.set(gameCode, JSON.stringify(createGame()), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
+  await games.hmset(gameCode, ...createGame(), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
 
   logger.info('Created game with code', gameCode);
 
