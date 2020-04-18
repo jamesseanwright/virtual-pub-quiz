@@ -22,10 +22,13 @@ provider:
       ${self:custom.securityGroupIds}
   tags:
     application-name: ${self:service}
+  environment:
+    REDIS_HOST: ${cf:${self:service}.redisHost}
 
 functions:
   createGame:
     handler: dist/create-game.default
+    timeout: 30 # TODO: Why does this take so long!
     events:
       - http:
           path: game
@@ -33,6 +36,7 @@ functions:
 
   endGame:
     handler: dist/end-game.default
+    timeout: 30 # TODO: Why does this take so long!
     events:
       - http: # TODO: probably wants to be SNS or something other than HTTP
           path: game
@@ -64,4 +68,8 @@ resources:
           - # TODO: make this a reusable CloudFormation-specific tag
             Key: application-name
             Value: ${self:service}
-
+  Outputs:
+    redisHost:
+      Description: Host for the games Redis server
+      Value:
+        Fn::GetAtt: [redisServer, RedisEndpoint.Address]
