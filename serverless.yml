@@ -28,7 +28,6 @@ provider:
 functions:
   createGame:
     handler: dist/create-game.default
-    timeout: 30 # TODO: Why does this take so long!
     events:
       - http:
           path: game
@@ -36,7 +35,6 @@ functions:
 
   endGame:
     handler: dist/end-game.default
-    timeout: 30 # TODO: Why does this take so long!
     events:
       - http: # TODO: probably wants to be SNS or something other than HTTP
           path: game
