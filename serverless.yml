@@ -1,6 +1,11 @@
 service: virtual-pub-quiz
 frameworkVersion: "=1.67.3"
 
+plugins:
+  # For reading .env.development into the env
+  # when locally invoking lambda functions
+  - serverless-dotenv-plugin
+
 custom:
   subnetIds:
     - "subnet-62e6ba04"

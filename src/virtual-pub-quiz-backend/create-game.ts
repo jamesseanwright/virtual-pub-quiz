@@ -3,7 +3,7 @@ import { v4String } from 'uuid/interfaces';
 import lazilyResolve from './dependencies';
 import { createGame } from './models';
 
-type GamesStorage = Pick<Redis, 'exists' | 'hmset'>;
+type GamesStorage = Pick<Redis, 'exists' | 'hmset' | 'expire'>;
 
 const GAME_TTL_DAYS = 0.5;
 const SECONDS_PER_DAY = 86400;
@@ -26,10 +26,11 @@ export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage
 
   const gameCode = await getGameCode(games, getUuid);
 
-  /* TODO: apparently, hmset is deprecated, but hset
-   * supports variadic values; update DefinitelyTyped
+  /* TODO: apparently, hmset is deprecated, but hset's
+   * TS signature is wrong; update DefinitelyTyped's
    * definition once confirmed as true to support this */
-  await games.hmset(gameCode, ...createGame(), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
+  await games.hmset(gameCode, createGame());
+  await games.expire(gameCode, Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY))
 
   logger.info('Created game with code', gameCode);
 

@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p .",
+    "invoke-handler": "NODE_ENV=development sls invoke local --function",
     "test": "jest"
   },
   "repository": {
