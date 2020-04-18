@@ -7,6 +7,10 @@ describe('create game lambda', () => {
 
   const expectedExpiry = ['EX', 43200];
 
+  const expectedGame = JSON.stringify({
+    rounds: [],
+  });
+
   it('should create a random game ID and store it under a new session in Redis', async () => {
     const redis = {
       exists: jest.fn().mockResolvedValue(false),
@@ -25,7 +29,7 @@ describe('create game lambda', () => {
     });
 
     expect(redis.set).toHaveBeenCalledTimes(1);
-    expect(redis.set).toHaveBeenCalledWith('9b1deb4d', JSON.stringify({}), ...expectedExpiry);
+    expect(redis.set).toHaveBeenCalledWith('9b1deb4d', expectedGame, ...expectedExpiry);
   });
 
   it('should generate another game code if the current one exists', async () => {
@@ -58,7 +62,7 @@ describe('create game lambda', () => {
     });
 
     expect(redis.set).toHaveBeenCalledTimes(1);
-    expect(redis.set).toHaveBeenCalledWith('78138c67', JSON.stringify({}), ...expectedExpiry);
+    expect(redis.set).toHaveBeenCalledWith('78138c67', expectedGame, ...expectedExpiry);
     expect(redis.exists).toHaveBeenCalledTimes(3);
 
     gameCodes.forEach(gameCode => expect(redis.exists).toHaveBeenCalledWith(gameCode));
@@ -94,7 +98,7 @@ describe('create game lambda', () => {
     });
 
     expect(redis.set).toHaveBeenCalledTimes(1);
-    expect(redis.set).toHaveBeenCalledWith('7d261f9d', JSON.stringify({}), ...expectedExpiry);
+    expect(redis.set).toHaveBeenCalledWith('7d261f9d', expectedGame, ...expectedExpiry);
     expect(redis.exists).toHaveBeenCalledTimes(1);
   });
 });

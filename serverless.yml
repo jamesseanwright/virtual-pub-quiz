@@ -7,7 +7,7 @@ custom:
     - "subnet-6e59c034"
     - "subnet-a5e3cced"
   securityGroupIds:
-    - "sg-0e3d6f44cc84e3782"
+    - "sg-0e3d6f44cc84e3782" # TODO: SEPARATE SECURITY GROUPS PER INSTANCE!!!
 
 provider:
   name: aws

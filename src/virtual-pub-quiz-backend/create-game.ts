@@ -20,15 +20,18 @@ const getGameCode = async (games: GamesStorage, getUuid: v4String): Promise<stri
     : gameCode;
 };
 
+// TODO: flesh this structure out!
+const createGame = () => ({
+  rounds: [],
+});
+
 export const createHandler = (logger: Pick<Console, 'info'>, games: GamesStorage, getUuid: v4String) => async () => {
   logger.info('Creating new game...');
 
   const gameCode = await getGameCode(games, getUuid);
 
-  /* TODO: flesh out value cached as we
-   * figure out what we'll need to store.
-   * TODO: refactor to Redis data structures */
-  await games.set(gameCode, JSON.stringify({}), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
+  // TODO: refactor to Redis data structures
+  await games.set(gameCode, JSON.stringify(createGame()), 'EX', Math.floor(GAME_TTL_DAYS * SECONDS_PER_DAY));
 
   logger.info('Created game with code', gameCode);
 
