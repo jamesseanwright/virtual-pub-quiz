@@ -1,10 +1,12 @@
-insert into pubquiz.category (id, display_name)
+set schema 'pubquiz';
+
+insert into category
 values (
   'f56c71b7-8dea-4abd-b145-638a984d8cd2',
   'Sports'
 );
 
-insert into pubquiz.question
+insert into question
 values
   (
     'c78e3ff0-fa3b-4180-a3dd-2fafce95cf9c',
@@ -17,21 +19,21 @@ values
     'b3513fb0-2a2b-4df7-884c-7298789e4ad1'
   );
 
-insert into pubquiz.answer
+insert into answer
 values
   ('b0b5e503-b3df-4773-866d-c2cfc0c47f22', 'Liverpool'),
   ('2d525aef-523d-4f6d-9f15-581c05807e85', 'Everton'),
   ('32a8cb99-1592-423c-9e2c-caf5fbeca8f2', 'Aston Villa'),
   ('b3513fb0-2a2b-4df7-884c-7298789e4ad1', 'Arsenal');
 
-insert into pubquiz.category_questions
+insert into category_questions
 values (
   '750b2c51-6029-403d-9fd7-1240828253eb',
   'f56c71b7-8dea-4abd-b145-638a984d8cd2',
   'c78e3ff0-fa3b-4180-a3dd-2fafce95cf9c'
 );
 
-insert into pubquiz.possible_answers
+insert into possible_answers
 values
   (
     '86eee3c1-6058-4121-b7d5-a41009941bcc',
