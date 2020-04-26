@@ -10,7 +10,7 @@ const createCategory = displayName => [[
   displayName,
 ]];
 
-const createQuestion = (contents, { id: answerId }) => [
+const createQuestion = (contents, [answerId]) => [
   v4(),
   'multiple_choice', // TODO: support other question types!
   contents,
@@ -22,15 +22,15 @@ const createAnswer = contents => [
   contents,
 ];
 
-const createCategoryQuestions = ({ id: categoryId }, questions) =>
-  questions.map(({ id: questionId }) => [
+const createCategoryQuestions = ([categoryId], questions) =>
+  questions.map(([questionId]) => [
     v4(),
     categoryId,
     questionId,
   ]);
 
-const createPossibleAnswers = ({ id: questionId }, answers) =>
-  answers.map(({ id: answerId }) => [
+const createPossibleAnswers = ([questionId], answers) =>
+  answers.map(([answerId]) => [
     v4(),
     questionId,
     answerId,

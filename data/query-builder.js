@@ -1,5 +1,7 @@
 'use strict';
 
+const { resolve } = require('path');
+
 const [, , seedPath] = process.argv;
 
 const {
@@ -8,7 +10,7 @@ const {
   answers,
   categoryQuestions,
   possibleAnswers,
-} = require(seedPath);
+} = require(resolve(process.cwd(), seedPath));
 
 const createInsertQueryBuilder = tableName =>
   rows => `
