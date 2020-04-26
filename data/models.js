@@ -10,10 +10,11 @@ const createCategory = displayName => [[
   displayName,
 ]];
 
-const createQuestion = (contents, correctAnswer) => [
+const createQuestion = (contents, { id: answerId }) => [
   v4(),
+  'multiple_choice', // TODO: support other question types!
   contents,
-  correctAnswer,
+  answerId,
 ];
 
 const createAnswer = contents => [
