@@ -5,31 +5,39 @@
 */
 
 create schema if not exists pubquiz;
+set schema 'pubquiz';
 
-create table if not exists pubquiz.category (
+create type question_type as enum (
+  'multiple_choice',
+  'free_text',
+  'picture'
+);
+
+create table if not exists category (
   id uuid primary key not null,
   display_name text not null
 );
 
-create table if not exists pubquiz.answer (
+create table if not exists answer (
   id uuid primary key not null,
   contents text not null
 );
 
-create table if not exists pubquiz.question (
+create table if not exists question (
   id uuid primary key not null,
+  'type' question_type not null,
   contents text not null,
   correct_answer uuid not null
 );
 
-create table if not exists pubquiz.category_questions (
+create table if not exists category_questions (
   id uuid primary key not null,
-  category_id uuid references pubquiz.category(id),
-  question_id uuid references pubquiz.question(id)
+  category_id uuid references category(id),
+  question_id uuid references question(id)
 );
 
-create table if not exists pubquiz.possible_answers (
+create table if not exists possible_answers (
   id uuid primary key not null,
-  question_id uuid references pubquiz.question(id),
-  answer_id uuid references pubquiz.answer(id)
+  question_id uuid references question(id),
+  answer_id uuid references answer(id)
 );
