@@ -2,6 +2,8 @@
 
 const { v4 } = require('uuid');
 
+const MAX_POSSIBLE_ANSWERS = 4;
+
 const toSqlString = val => {
   // To avoid double serialisation
   const isSerialised = val.match(/^'(.*)'$/);
@@ -10,6 +12,19 @@ const toSqlString = val => {
 };
 
 const serialiseValues = items => items.map(toSqlString);
+
+const randomInt = max => Math.round(max * Math.random());
+
+const pickPossibleAnswers = (correctAnswer, allAnswers) => {
+    const othersOffset = randomInt(allAnswers.length - MAX_POSSIBLE_ANSWERS - 1);
+
+    const otherAnswers = allAnswers
+        .filter(([id]) => id !== correctAnswer[0])
+        .slice(othersOffset, othersOffset + MAX_POSSIBLE_ANSWERS - 1);
+
+    return [correctAnswer, ...otherAnswers]
+        .sort(() => randomInt(1));
+};
 
 /* This is a 2D array as our query builder
  * creates insert queries based upon multiple
@@ -38,12 +53,16 @@ const createCategoryQuestions = ([[categoryId]], questions) =>
     questionId,
   ]));
 
-const createPossibleAnswers = ([questionId], answers) =>
-  answers.map(([answerId]) => serialiseValues([
-    v4(),
-    questionId,
-    answerId,
-  ]));
+const createPossibleAnswers = ([questionId, , , correctAnswerId], allAnswers) => {
+  const correctAnswer = allAnswers.find(([id]) => id === correctAnswerId);
+
+  return pickPossibleAnswers(correctAnswer, allAnswers)
+    .map(([answerId]) => serialiseValues([
+      v4(),
+      questionId,
+      answerId,
+    ]));
+};
 
 module.exports = {
   createCategory,
