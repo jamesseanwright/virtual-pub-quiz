@@ -15,6 +15,7 @@ const serialiseValues = items => items.map(toSqlString);
 
 const randomInt = max => Math.round(max * Math.random());
 
+// TODO: verify randomisation has enough entropy
 const pickPossibleAnswers = (correctAnswer, allAnswers) => {
   const othersOffset = Math.max(0, randomInt(allAnswers.length - MAX_POSSIBLE_ANSWERS - 1));
 

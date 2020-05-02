@@ -22,7 +22,7 @@ const answers = [
 const questions = [
   [
     'Who won the Football League First Division in the 1985-86 season?',
-    answers[0], // TODO: function to select correct answer and 3 others, all in shuffled order
+    answers[0],
   ],
   [
     'Which football club was first known as Dial Square?',
