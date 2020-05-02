@@ -26,12 +26,11 @@ const questions = [
   ],
 ].map(args => createQuestion(...args))
 
-
 const categoryQuestions = createCategoryQuestions(category, questions);
 
 const possibleAnswers = [
-  [questions[0], answers],
-].map(args => createPossibleAnswers(...args));
+  ...createPossibleAnswers(questions[0], answers),
+];
 
 module.exports = {
   category,
