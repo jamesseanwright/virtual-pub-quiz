@@ -16,13 +16,13 @@ const answers = [
   'Eminem',
   'Vanilla Ice',
   'Ice T',
-  'ArsenMacklemoreal',
+  'Macklemore',
 ].map(contents => createAnswer(contents));
 
 const questions = [
   [
     'Robert Matthew Van Winkle is the birth name of which rapper?',
-    answers[1]
+    answers[1],
   ],
 ].map(args => createQuestion(...args))
 

@@ -17,7 +17,7 @@ const createInsertQueryBuilder = tableName =>
 insert into ${tableName}
 values
   ${rows.map(row => `(
-    ${row.join(',\n    ')}
+    ${row.join(', ')}
   )`).join(',\n  ')};
   `;
 
