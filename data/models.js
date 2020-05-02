@@ -16,14 +16,14 @@ const serialiseValues = items => items.map(toSqlString);
 const randomInt = max => Math.round(max * Math.random());
 
 const pickPossibleAnswers = (correctAnswer, allAnswers) => {
-    const othersOffset = randomInt(allAnswers.length - MAX_POSSIBLE_ANSWERS - 1);
+  const othersOffset = Math.max(0, randomInt(allAnswers.length - MAX_POSSIBLE_ANSWERS - 1));
 
-    const otherAnswers = allAnswers
-        .filter(([id]) => id !== correctAnswer[0])
-        .slice(othersOffset, othersOffset + MAX_POSSIBLE_ANSWERS - 1);
+  const otherAnswers = allAnswers
+    .filter(([id]) => id !== correctAnswer[0])
+    .slice(othersOffset, othersOffset + MAX_POSSIBLE_ANSWERS - 1);
 
-    return [correctAnswer, ...otherAnswers]
-        .sort(() => randomInt(1));
+  return [correctAnswer, ...otherAnswers]
+    .sort(() => randomInt(1.5));
 };
 
 /* This is a 2D array as our query builder
